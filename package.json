@@ -1,0 +1,16 @@
+{
+  "name": "crowdforge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CrowdForge monorepo: Stellar (Soroban) contracts + Next.js frontend.",
+  "scripts": {
+    "build": "npm --prefix web run build",
+    "dev": "npm --prefix web run dev",
+    "start": "npm --prefix web run start",
+    "lint": "npm --prefix web run lint",
+    "typecheck": "npm --prefix web run typecheck",
+    "deploy": "bash scripts/deploy.sh",
+    "deploy:reset": "bash scripts/deploy.sh --reset",
+    "deploy:futurenet": "bash scripts/deploy.sh --network futurenet"
+  }
+}
