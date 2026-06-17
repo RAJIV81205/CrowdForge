@@ -67,6 +67,84 @@ impl Fundwave {
         }
     }
 
+    pub fn create_campaign(
+        env: Env,
+        creator: Address,
+        token: Address,
+        goal: i128,
+        deadline: u64,
+        title: String,
+        description: String,
+    ) -> u64 {
+        creator.require_auth();
+        if goal <= 0 {
+            panic_with_error!(&env, Error::GoalMustBePositive);
+        }
+        if deadline <= env.ledger().timestamp() {
+            panic_with_error!(&env, Error::DeadlineInPast);
+        }
+        let next_id: u64 = env
+            .storage()
+            .instance()
+            .get(&DataKey::NextId)
+            .unwrap_or(1u64);
+        env.storage()
+            .instance()
+            .set(&DataKey::NextId, &(next_id + 1));
+        let campaign = Campaign {
+            id: next_id,
+            creator: creator.clone(),
+            token,
+            goal,
+            raised: 0,
+            deadline,
+            title,
+            description,
+            status: CampaignStatus::Active,
+        };
+        env.storage()
+            .persistent()
+            .set(&DataKey::Campaign(next_id), &campaign);
+        env.storage().persistent().extend_ttl(
+            &DataKey::Campaign(next_id),
+            100_000,
+            200_000,
+        );
+        env.events().publish(
+            (Symbol::new(&env, "campaign_created"),),
+            (next_id, creator, goal, deadline),
+        );
+        next_id
+    }
+
+    pub fn donate(env: Env, id: u64, donor: Address, amount: i128) {
+        donor.require_auth();
+        if amount <= 0 {
+            panic_with_error!(&env, Error::AmountMustBePositive);
+        }
+        let mut campaign = load_campaign(&env, id);
+        if campaign.status != CampaignStatus::Active {
+            panic_with_error!(&env, Error::CampaignNotActive);
+        }
+        if env.ledger().timestamp() > campaign.deadline {
+            panic_with_error!(&env, Error::DeadlinePassed);
+        }
+        let token_client = token::Client::new(&env, &campaign.token);
+        token_client.transfer(&donor, &env.current_contract_address(), &amount);
+        campaign.raised = campaign.raised.checked_add(amount).expect("overflow");
+        if campaign.raised >= campaign.goal {
+            campaign.status = CampaignStatus::Successful;
+        }
+        env.storage().persistent().set(&DataKey::Campaign(id), &campaign);
+        let key = DataKey::Donor(id, donor.clone());
+        let prev: i128 = env.storage().persistent().get(&key).unwrap_or(0i128);
+        env.storage().persistent().set(&key, &(prev + amount));
+        env.events().publish(
+            (Symbol::new(&env, "donated"),),
+            (id, donor, amount),
+        );
+    }
+
     pub fn get_campaign(env: Env, id: u64) -> Option<Campaign> {
         env.storage().persistent().get(&DataKey::Campaign(id))
     }
@@ -92,4 +170,11 @@ impl Fundwave {
         }
         out
     }
+}
+
+fn load_campaign(env: &Env, id: u64) -> Campaign {
+    env.storage()
+        .persistent()
+        .get(&DataKey::Campaign(id))
+        .unwrap_or_else(|| panic_with_error!(env, Error::CampaignNotFound))
 }
