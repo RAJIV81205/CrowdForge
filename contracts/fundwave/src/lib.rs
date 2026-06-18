@@ -178,3 +178,62 @@ fn load_campaign(env: &Env, id: u64) -> Campaign {
         .get(&DataKey::Campaign(id))
         .unwrap_or_else(|| panic_with_error!(env, Error::CampaignNotFound))
 }
+
+    pub fn finalize(env: Env, id: u64) {
+        let mut campaign = load_campaign(&env, id);
+        if campaign.status != CampaignStatus::Active {
+            return;
+        }
+        if campaign.raised >= campaign.goal {
+            campaign.status = CampaignStatus::Successful;
+        } else if env.ledger().timestamp() > campaign.deadline {
+            campaign.status = CampaignStatus::Failed;
+        } else {
+            return;
+        }
+        env.storage().persistent().set(&DataKey::Campaign(id), &campaign);
+        env.events().publish(
+            (Symbol::new(&env, "finalized"),),
+            (id, campaign.status.clone()),
+        );
+    }
+
+    pub fn withdraw(env: Env, id: u64) {
+        let mut campaign = load_campaign(&env, id);
+        campaign.creator.require_auth();
+        if campaign.status != CampaignStatus::Successful {
+            panic_with_error!(&env, Error::CampaignNotActive);
+        }
+        let token_client = token::Client::new(&env, &campaign.token);
+        token_client.transfer(
+            &env.current_contract_address(),
+            &campaign.creator,
+            &campaign.raised,
+        );
+        campaign.status = CampaignStatus::Withdrawn;
+        env.storage().persistent().set(&DataKey::Campaign(id), &campaign);
+        env.events().publish(
+            (Symbol::new(&env, "withdrawn"),),
+            (id, campaign.creator.clone(), campaign.raised),
+        );
+    }
+
+    pub fn refund(env: Env, id: u64, donor: Address) {
+        donor.require_auth();
+        let campaign = load_campaign(&env, id);
+        if campaign.status != CampaignStatus::Failed {
+            panic_with_error!(&env, Error::NotFailed);
+        }
+        let key = DataKey::Donor(id, donor.clone());
+        let amount: i128 = env.storage().persistent().get(&key).unwrap_or(0i128);
+        if amount <= 0 {
+            panic_with_error!(&env, Error::NothingToRefund);
+        }
+        let token_client = token::Client::new(&env, &campaign.token);
+        token_client.transfer(&env.current_contract_address(), &donor, &amount);
+        env.storage().persistent().set(&key, &0i128);
+        env.events().publish(
+            (Symbol::new(&env, "refunded"),),
+            (id, donor, amount),
+        );
+    }
