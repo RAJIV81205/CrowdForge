@@ -1,0 +1,11 @@
+:root {
+  --paper: #f4efe6;
+  --ink: #0a0a0a;
+  --muted: #6b6b6b;
+  --rule: #0a0a0a;
+  --accent: #ff5722;
+  --ok: #2e7d32;
+  --warn: #c08400;
+  --err: #c62828;
+}
+html, body { background: var(--paper); color: var(--ink); font-family: system-ui, sans-serif; }
