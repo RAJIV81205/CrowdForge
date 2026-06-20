@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: contracts/fundwave
+        working-directory: contracts/crowdforge
     steps:
       - uses: actions/checkout@v4
 
@@ -31,8 +31,8 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            contracts/fundwave/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('contracts/fundwave/Cargo.lock', 'contracts/fundwave/Cargo.toml') }}
+            contracts/crowdforge/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('contracts/crowdforge/Cargo.lock', 'contracts/crowdforge/Cargo.toml') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
 
@@ -49,7 +49,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: crowdforge-wasm
-          path: contracts/fundwave/target/wasm32-unknown-unknown/release/fundwave.wasm
+          path: contracts/crowdforge/target/wasm32-unknown-unknown/release/crowdforge.wasm
           if-no-files-found: error
           retention-days: 14
 

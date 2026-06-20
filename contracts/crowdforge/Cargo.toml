@@ -1,8 +1,8 @@
 [package]
-name = "fundwave"
+name = "crowdforge"
 version = "0.1.0"
 edition = "2021"
-description = "FundWave: a crowdfunding smart contract for Stellar / Soroban"
+description = "CrowdForge: a crowdfunding smart contract for Stellar / Soroban"
 license = "MIT"
 
 [lib]

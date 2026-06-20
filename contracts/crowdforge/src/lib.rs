@@ -1,4 +1,4 @@
-//! FundWave — a minimal but complete crowdfunding contract for Stellar / Soroban.
+//! CrowdForge — a minimal but complete crowdfunding contract for Stellar / Soroban.
 //!
 //! Lifecycle: Active -> Successful (goal met) | Failed (deadline passed).
 //! Authorization via Address::require_auth. Storage keyed through DataKey enum.
@@ -57,10 +57,10 @@ pub struct Campaign {
 }
 
 #[contract]
-pub struct Fundwave;
+pub struct Crowdforge;
 
 #[contractimpl]
-impl Fundwave {
+impl Crowdforge {
     pub fn init(env: Env) {
         if !env.storage().instance().has(&DataKey::NextId) {
             env.storage().instance().set(&DataKey::NextId, &1u64);
@@ -170,14 +170,6 @@ impl Fundwave {
         }
         out
     }
-}
-
-fn load_campaign(env: &Env, id: u64) -> Campaign {
-    env.storage()
-        .persistent()
-        .get(&DataKey::Campaign(id))
-        .unwrap_or_else(|| panic_with_error!(env, Error::CampaignNotFound))
-}
 
     pub fn finalize(env: Env, id: u64) {
         let mut campaign = load_campaign(&env, id);
@@ -237,79 +229,13 @@ fn load_campaign(env: &Env, id: u64) -> Campaign {
             (id, donor, amount),
         );
     }
+}
 
-#[cfg(test)]
-mod test {
-    use super::*;
-    use soroban_sdk::{testutils::{Address as _, Ledger}, token, Address, Env, String};
-
-    fn create_token<'a>(env: &'a Env, admin: &Address)
-        -> (Address, token::Client<'a>, token::StellarAssetClient<'a>)
-    {
-        let addr = env.register_stellar_asset_contract_v2(admin.clone());
-        (
-            addr.address(),
-            token::Client::new(env, &addr.address()),
-            token::StellarAssetClient::new(env, &addr.address()),
-        )
-    }
-
-    #[test]
-    fn full_lifecycle_success() {
-        let env = Env::default();
-        env.mock_all_auths();
-        let contract_id = env.register(Fundwave, ());
-        let client = FundwaveClient::new(&env, &contract_id);
-        let admin = Address::generate(&env);
-        let creator = Address::generate(&env);
-        let donor1 = Address::generate(&env);
-        let donor2 = Address::generate(&env);
-        let (token_addr, token_client, admin_client) = create_token(&env, &admin);
-        admin_client.mint(&donor1, &1_000);
-        admin_client.mint(&donor2, &4_000);
-        let id = client.create_campaign(
-            &creator, &token_addr, &500i128,
-            &(env.ledger().timestamp() + 100),
-            &String::from_str(&env, "Buy a goat"),
-            &String::from_str(&env, "we need a goat for the village"),
-        );
-        assert_eq!(id, 1);
-        client.donate(&id, &donor1, &200i128);
-        client.donate(&id, &donor2, &300i128);
-        let c = client.get_campaign(&id).unwrap();
-        assert_eq!(c.raised, 500);
-        assert_eq!(c.status, CampaignStatus::Successful);
-        client.withdraw(&id);
-        let c2 = client.get_campaign(&id).unwrap();
-        assert_eq!(c2.status, CampaignStatus::Withdrawn);
-        assert_eq!(token_client.balance(&creator), 500);
-    }
-
-    #[test]
-    fn failed_campaign_refund() {
-        let env = Env::default();
-        env.mock_all_auths();
-        let contract_id = env.register(Fundwave, ());
-        let client = FundwaveClient::new(&env, &contract_id);
-        let admin = Address::generate(&env);
-        let creator = Address::generate(&env);
-        let donor = Address::generate(&env);
-        let (token_addr, token_client, admin_client) = create_token(&env, &admin);
-        admin_client.mint(&donor, &1_000);
-        let id = client.create_campaign(
-            &creator, &token_addr, &10_000i128,
-            &(env.ledger().timestamp() + 10),
-            &String::from_str(&env, "Big goal"),
-            &String::from_str(&env, "nope"),
-        );
-        client.donate(&id, &donor, &100i128);
-        env.ledger().set_timestamp(env.ledger().timestamp() + 100);
-        client.finalize(&id);
-        let c = client.get_campaign(&id).unwrap();
-        assert_eq!(c.status, CampaignStatus::Failed);
-        client.refund(&id, &donor);
-        assert_eq!(token_client.balance(&donor), 1_000);
-    }
+fn load_campaign(env: &Env, id: u64) -> Campaign {
+    env.storage()
+        .persistent()
+        .get(&DataKey::Campaign(id))
+        .unwrap_or_else(|| panic_with_error!(env, Error::CampaignNotFound))
 }
 
 #[cfg(test)]
@@ -332,8 +258,8 @@ mod test {
     fn full_lifecycle_success() {
         let env = Env::default();
         env.mock_all_auths();
-        let contract_id = env.register(Fundwave, ());
-        let client = FundwaveClient::new(&env, &contract_id);
+        let contract_id = env.register(Crowdforge, ());
+        let client = CrowdforgeClient::new(&env, &contract_id);
         let admin = Address::generate(&env);
         let creator = Address::generate(&env);
         let donor1 = Address::generate(&env);
@@ -363,8 +289,8 @@ mod test {
     fn failed_campaign_refund() {
         let env = Env::default();
         env.mock_all_auths();
-        let contract_id = env.register(Fundwave, ());
-        let client = FundwaveClient::new(&env, &contract_id);
+        let contract_id = env.register(Crowdforge, ());
+        let client = CrowdforgeClient::new(&env, &contract_id);
         let admin = Address::generate(&env);
         let creator = Address::generate(&env);
         let donor = Address::generate(&env);

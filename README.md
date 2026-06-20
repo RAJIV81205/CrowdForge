@@ -111,10 +111,10 @@ Run all commands from the **repo root** unless stated otherwise.
    npm install
    ```
 
-3. Build the Soroban contract (produces `contracts/fundwave/target/wasm32-unknown-unknown/release/fundwave.wasm`):
+3. Build the Soroban contract (produces `contracts/crowdforge/target/wasm32-unknown-unknown/release/crowdforge.wasm`):
 
    ```bash
-   cd contracts/fundwave
+   cd contracts/crowdforge
    cargo build --release --target wasm32-unknown-unknown
    ```
 
@@ -145,7 +145,7 @@ Open <http://localhost:3000>.
 Run the contract unit tests (3+ tests pass; required for the Level 3 submission screenshot):
 
 ```bash
-cd contracts/fundwave
+cd contracts/crowdforge
 cargo test --locked
 ```
 
@@ -186,8 +186,8 @@ Run from the **repo root**:
 - `npm run deploy` — build + deploy the Soroban contract to testnet
 - `npm run deploy:reset` — deploy and then call `init()` / a post-deploy invoke
 - `npm run deploy:futurenet` — deploy to futurenet
-- `cargo test --locked` (inside `contracts/fundwave/`) — run the contract unit tests
-- `cargo build --release --target wasm32-unknown-unknown` (inside `contracts/fundwave/`) — build the contract WASM
+- `cargo test --locked` (inside `contracts/crowdforge/`) — run the contract unit tests
+- `cargo build --release --target wasm32-unknown-unknown` (inside `contracts/crowdforge/`) — build the contract WASM
 
 ## Deploy (Vercel / Netlify)
 
@@ -213,8 +213,8 @@ Suggested walkthrough:
 ## Project Structure
 
 ```
-fundwave/
-├── contracts/fundwave/      # Soroban smart contract (Rust)
+crowdforge/
+├── contracts/crowdforge/      # Soroban smart contract (Rust)
 │   ├── src/lib.rs           # create / donate / finalize / withdraw / refund
 │   └── Cargo.toml
 ├── web/                     # Next.js 16 frontend (React 19, Turbopack)
@@ -240,7 +240,7 @@ See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 ## Additional Docs
 
 - Frontend guide: [web/README.md](./web/README.md) *(add if you have one)*
-- Contract guide: [contracts/fundwave/README.md](./contracts/fundwave/README.md) *(add if you have one)*
+- Contract guide: [contracts/crowdforge/README.md](./contracts/crowdforge/README.md) *(add if you have one)*
 
 ## Submission Notes
 

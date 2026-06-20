@@ -19,7 +19,7 @@ set -euo pipefail
 NETWORK="testnet"
 SOURCE_ACCOUNT=""        # name of the stellar identity to use
 CONTRACT_ALIAS="crowdforge"
-CONTRACT_NAME="fundwave"
+CONTRACT_NAME="crowdforge"
 RESET="false"
 INVOKE_FN=""
 INVOKE_ARGS=()
