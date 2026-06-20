@@ -20,8 +20,6 @@ export default function Home() {
   const refresh = useCallback(async () => {
     try {
       const list = await listCampaigns(0, 50);
-      // newest first
-      list.sort((a, b) => b.id - a.id);
       setCampaigns(list);
       setErr(null);
     } catch (e) {
@@ -41,6 +39,12 @@ export default function Home() {
   const totalRaised = useMemo(() => {
     if (!campaigns) return 0n;
     return campaigns.reduce((acc, c) => acc + BigInt(c.raised), 0n);
+  }, [campaigns]);
+
+  const sortedCampaigns = useMemo(() => {
+    if (!campaigns) return null;
+    // newest first, stable across refreshes so progress bars don't reset
+    return [...campaigns].sort((a, b) => b.id - a.id);
   }, [campaigns]);
 
   return (
@@ -111,15 +115,15 @@ export default function Home() {
           />
         ) : null}
 
-        {campaigns === null ? (
+        {sortedCampaigns === null ? (
           <div className="empty">Loading campaigns…</div>
-        ) : campaigns.length === 0 ? (
+        ) : sortedCampaigns.length === 0 ? (
           <div className="empty">
             No campaigns yet. Be the first to start one.
           </div>
         ) : (
           <div className="grid">
-            {campaigns.map((c) => (
+            {sortedCampaigns?.map((c) => (
               <CampaignCard
                 key={c.id}
                 campaign={c}
