@@ -42,26 +42,25 @@ This project demonstrates:
   <tr>
     <td align="center" width="50%">
       <strong>🏠 Home Feed</strong><br/><br/>
-      <em><img width="2032" height="1161" alt="2026-06-19_08-57-42" src="<img width="2012" height="1141" alt="Screenshot 2026-06-21 at 12 59 49 AM" src="https://github.com/user-attachments/assets/035138b1-3014-480c-b73b-a08468db3134" />" />
+      <em><img width="2012" height="1141" alt="Screenshot 2026-06-21 at 12 59 49 AM" src="https://github.com/user-attachments/assets/035138b1-3014-480c-b73b-a08468db3134" />
 </em>
     </td>
     <td align="center" width="50%">
       <strong>📝 Stellar Wallet Kit</strong><br/><br/>
-      <em><img width="1877" height="1006" alt="2026-06-19_08-31-14" src="<img width="2012" height="1141" alt="Screenshot 2026-06-21 at 12 59 43 AM" src="https://github.com/user-attachments/assets/208408f6-fc9e-42a2-b93b-1d709eba8fdc" />
-" />
+      <em><img width="2012" height="1141" alt="Screenshot 2026-06-21 at 12 59 43 AM" src="https://github.com/user-attachments/assets/208408f6-fc9e-42a2-b93b-1d709eba8fdc" />
 </em>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
       <strong>💸 Donate</strong><br/><br/>
-      <em><img width="1877" height="1006" alt="2026-06-19_08-31-14" src="<img width="2012" height="1141" alt="Screenshot 2026-06-21 at 12 59 57 AM" src="https://github.com/user-attachments/assets/a64777e1-7cca-4070-9666-05c1d55341fa" />" />
+      <em><img width="2012" height="1141" alt="Screenshot 2026-06-21 at 12 59 57 AM" src="https://github.com/user-attachments/assets/a64777e1-7cca-4070-9666-05c1d55341fa" />
 </em>
     </td>
     <td align="center" width="50%">
       <strong>✅ CI Results</strong><br/><br/>
-      <em><img width="2032" height="1161" alt="image" src="<img width="2012" height="1141" alt="Screenshot 2026-06-21 at 12 50 51 AM" src="https://github.com/user-attachments/assets/98adf501-582a-46c7-ae97-dab4651f4481" />
-" /></em>
+      <em><img width="2012" height="1141" alt="Screenshot 2026-06-21 at 12 50 51 AM" src="https://github.com/user-attachments/assets/98adf501-582a-46c7-ae97-dab4651f4481" />
+</em>
     </td>
   </tr>
 </table>
@@ -69,7 +68,7 @@ This project demonstrates:
 ## Mobile responsive screenshot
 
 <div align="center">
-<em><img width="2032" height="1161" alt="image" src="<img width="440" height="901" alt="Screenshot 2026-06-21 at 1 01 03 AM" src="https://github.com/user-attachments/assets/baacbfec-8b46-409f-ae6a-63d43f90762f" />" />
+<em><img width="440" height="901" alt="Screenshot 2026-06-21 at 1 01 03 AM" src="https://github.com/user-attachments/assets/baacbfec-8b46-409f-ae6a-63d43f90762f" />
 </em>
 </div>
 
