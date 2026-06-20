@@ -4,8 +4,8 @@ CrowdForge is a mini end-to-end Stellar + Soroban dApp: a crowdfunding / donatio
 
 ## Submission Checklist (fill before submitting)
 
-- Live demo link: https://crowdforge.vercel.app/
-- Demo video (1 minute) link: https://drive.google.com/file/d/1dFeg8Ik0mn7KfHMuFhhfVLJVmekP0H8L/view?usp=sharing
+- Live demo link: https://crowd-forge-five.vercel.app/
+- Demo video (1 minute) link: https://drive.google.com/file/d/16k7TGdL-fpQxltlu56ARpQHAYLwTaqQ9/view?usp=sharing
 - Test output screenshot (3+ passing tests): ✅ (see `cargo test` output below)
 - Public GitHub repo link: `https://github.com/jesleenk/CrowdForge`
 - 3+ meaningful commits for Level 3: ✅
@@ -92,7 +92,7 @@ Full deployment record (tx hashes, WASM hash, source account, timestamps) lives 
 
 ## Live Demo
 
-https://crowdforge.vercel.app/
+https://crowd-forge-five.vercel.app/
 
 ## Setup
 
@@ -200,7 +200,7 @@ This is a standard Next.js 16 build.
 
 ## Demo Video (1 minute)
 
-https://drive.google.com/file/d/1dFeg8Ik0mn7KfHMuFhhfVLJVmekP0H8L/view?usp=sharing
+https://drive.google.com/file/d/16k7TGdL-fpQxltlu56ARpQHAYLwTaqQ9/view?usp=sharing
 
 Suggested walkthrough:
 
